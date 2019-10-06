@@ -4,11 +4,11 @@ from sqlalchemy.ext.declarative import declarative_base
 import psycopg2 as dbapi2
 
 POSTGRES = {
-    'user': 'enhrmc',
-    'pw': 'password',
-    'db': 'enhrmc',
+    'user': 'salil',
+    'pw': 'salil',
+    'db': 'salil',
     'host': 'localhost',
-    'port': '5433',
+    'port': '5432',
 }
 
 SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\

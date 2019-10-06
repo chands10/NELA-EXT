@@ -2,22 +2,82 @@
 {% block title %}NELA - Home{% endblock %}
 {% block content %}
 
-<div class="card mx-auto my-auto" style="width: 25rem;">
-    <div class="card-body">
-        <h5 class="card-title" align="center">Select Fields</h5>
-        <form method="POST" action="{{ url_for('range_filter') }}" id="fields_form">
-            {{ form.csrf_token }}
-            <div id="fields_row" class="pt-2" align="center">
-                {{ form.Fields }}
+<!-- The Modal -->
+<div id="fieldsModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="card mx-auto my-auto" style="width: 25rem;">
+        <div class="card-body">
+            <h5 class="card-title" align="center">Select Fields</h5>
+            <form method="POST" action="{{ url_for('range_filter') }}" id="fields_form">
+                {{ form.csrf_token }}
+                <div id="fields_row" class="pt-2" align="center">
+                    {{ form.Fields }}
+                </div>
+            </form>
+            <div class="card-footer text-center" >
+                <!-- Button logic is written in static/js/handerFilters.js -->
+                <input type="button" class="btn btn-info" value="Select all" id="btn_selectall">
+                <input type="button" class="btn btn-warning" value="Reset" id="btn_reset">
+                <input type="submit" class="btn btn-primary" value="Filter" form="fields_form" id="btn_submit1">
             </div>
-        </form>
-        <div class="card-footer text-center" >
-            <!-- Button logic is written in static/js/handerFilters.js -->
-            <input type="button" class="btn btn-info" value="Select all" id="btn_selectall">
-            <input type="button" class="btn btn-warning" value="Reset" id="btn_reset">
-            <input type="submit" class="btn btn-primary" value="Filter" form="fields_form" id="btn_submit1">
         </div>
     </div>
+  </div>
+
+</div>
+
+<!-- The Modal -->
+<div id="sourcesModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="card mx-auto my-auto" style="width: 25rem;">
+        <div class="card-body">
+            <h5 class="card-title" align="center">Select Sources</h5>
+            <form method="POST" action="{{ url_for('source_filter') }}" id="sources_form">
+                {{ form3.csrf_token }}
+                <div id="fields_row" class="pt-2" align="center">
+                    {{ form3.Sources }}
+                </div>
+            </form>
+            <div class="card-footer text-center" >
+                <!-- Button logic is written in static/js/handerFilters.js -->
+                <input type="button" class="btn btn-info" value="Select all" id="btn_selectall_sources">
+                <input type="submit" class="btn btn-primary" value="Filter" form="sources_form" id="btn_submit1_sources">
+            </div>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+<button type="button" id="fieldsBtn">Fields</button></br>
+<button type="button" id="sourcesBtn">Primary Sources</button></br>
+
+<div class="card mx-auto my-auto" style="width: 25rem;">
+    <div class="card-body">
+        <h5 class="card-title" align="center">Specify Ranges</h5>
+        <form method="POST" action="{{ url_for('data') }}" id="sliders_form">
+            {{ form2.csrf_token }}
+            <div id="sliders_row" class="pt-2" align="center">
+                {{ form2.Sliders }}
+            </div>
+        </form>
+        <div class="card-footer text-center">
+            <input type="text" id="daterange" name="daterange" form="sliders_form" style="text-align: center;" 
+                value="01/01/2010 - {{ today }}" align="center">
+            <input type="submit" class="btn btn-primary" value="Filter" form="sliders_form" id="btn_submit2">
+            <input type="button" class="btn btn-warning" value="Reset" id="btn_reset_fields">
+        </div>
+    </div>
+</div>
+
+<div class="container rounded pt-2" style="background-color:white;">
+    {{ table }}
 </div>
 
 {% endblock %}

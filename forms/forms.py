@@ -18,7 +18,6 @@ field_names = text_fields + field_names
 # Required for checkbox initialization
 field_tuples = [(x, True) for x in field_names[4:9]] + [(x, False) for x in field_names[10:-1]]
 
-
 """ Multiple checkbox (buttons) form for DB fields """
 
 def select_multi_checkbox(fields, ul_class="", **kwargs):
@@ -40,20 +39,46 @@ def select_multi_checkbox(fields, ul_class="", **kwargs):
     return "".join(html)
 
 class FieldSelection(FlaskForm):
-	Fields = Markup(select_multi_checkbox( fields=field_tuples ) )
+    #Fields = None
+    Fields = Markup(select_multi_checkbox( fields=field_tuples ) )
+    #def __init__(self, fields2):
+        #fields2 = set(fields2)
+        ## Required for checkbox initialization
+        #field_tuples = [(x, x in fields2) for x in field_names[4:-1]]
+        #self.Fields = Markup(select_multi_checkbox( fields=field_tuples ) )
+
+class SourceSelection(FlaskForm):
+    Sources = None
+    def __init__(self, source_tuples):
+        self.Sources = Markup(select_multi_checkbox( fields=source_tuples ) )
 
 
 """ Multiple slider form for DB field filtering """
 """ Sliders are initialized in initSliders.js   """
 
-def multi_field_sliders(fields, ul_class="", **kwargs):
+def multi_field_sliders(fields, bounds, ranges, ul_class="", **kwargs):
     kwargs.setdefault("type", "text")
     html = ["<div class='sliders-container' align='center' style='border:2px solid #ccc; width:350px; height: " \
         "375px; overflow-y: scroll;'>"]
     html.append("<ul %s style='list-style-type: none;'>" % (html_params(id="fields", class_=ul_class)))
-    for field in fields:
+    for i in range(len(fields)):
+        field = fields[i]
+        
+        if field in bounds:
+            currentBound = bounds[field]
+        else:
+            currentBound = (-100, 100) #does not matter
+
+	
+        currentRange = tuple(map(int, ranges[i].split(";")))
+        
+        #check if user updated slider
+        lowerBound = max(currentRange[0], currentBound[0])
+        upperBound = min(currentRange[1], currentBound[1])
+        currentRange = (lowerBound, upperBound)
+        
         slider_id = "%s" % (field)
-        slider_settings = "data-type='double' data-min='-100' data-max='100' data-from='-100' data-to='100' data-grid='true'"
+        slider_settings = "data-type='double' data-min='{0}' data-max='{1}' data-from='{2}' data-to='{3}' data-grid='true'".format(currentBound[0], currentBound[1], currentRange[0], currentRange[1])
         options = dict(kwargs, name=field, id=slider_id)
         hidden_option = "hidden" if slider_id in text_fields else ""
         html.append("<li %s><div class='pl-4 pt-5 bd-highlight field-slider' id='%s_container'>" % (hidden_option, slider_id))
@@ -66,8 +91,8 @@ def multi_field_sliders(fields, ul_class="", **kwargs):
 class FieldSliders(FlaskForm):
     Sliders = None
 
-    def __init__(self, fields):
-        self.Sliders = Markup(multi_field_sliders (fields=fields) )
+    def __init__(self, fields, bounds, ranges):
+        self.Sliders = Markup(multi_field_sliders (fields=fields, bounds=bounds, ranges=ranges) )
         
         
 """ Generate HTML for the datatable """
