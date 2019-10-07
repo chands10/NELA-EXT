@@ -30,24 +30,50 @@
 </div>
 
 <!-- The Modal -->
-<div id="sourcesModal" class="modal">
+<div id="source1Modal" class="modal">
 
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
     <div class="card mx-auto my-auto" style="width: 25rem;">
         <div class="card-body">
-            <h5 class="card-title" align="center">Select Sources</h5>
-            <form method="POST" action="{{ url_for('source_filter') }}" id="sources_form">
-                {{ form3.csrf_token }}
+            <h5 class="card-title" align="center">Select Primary Sources</h5>
+            <form method="POST" action="{{ url_for('source_filter',source='source1') }}" id="source1_form">
+                {{ source1_form.csrf_token }}
                 <div id="fields_row" class="pt-2" align="center">
-                    {{ form3.Sources }}
+                    {{ source1_form.Sources }}
                 </div>
             </form>
             <div class="card-footer text-center" >
                 <!-- Button logic is written in static/js/handerFilters.js -->
-                <input type="button" class="btn btn-info" value="Select all" id="btn_selectall_sources">
-                <input type="submit" class="btn btn-primary" value="Filter" form="sources_form" id="btn_submit1_sources">
+                <input type="button" class="btn btn-info" value="Select all" id="btn_selectall_source1">
+                <input type="submit" class="btn btn-primary" value="Filter" form="source1_form" id="btn_submit_source1">
+            </div>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- The Modal -->
+<div id="source2Modal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="card mx-auto my-auto" style="width: 25rem;">
+        <div class="card-body">
+            <h5 class="card-title" align="center">Select Secondary Sources</h5>
+            <form method="POST" action="{{ url_for('source_filter',source='source2') }}" id="source2_form">
+                {{ source2_form.csrf_token }}
+                <div id="fields_row" class="pt-2" align="center">
+                    {{ source2_form.Sources }}
+                </div>
+            </form>
+            <div class="card-footer text-center" >
+                <!-- Button logic is written in static/js/handerFilters.js -->
+                <input type="button" class="btn btn-info" value="Select all" id="btn_selectall_source2">
+                <input type="submit" class="btn btn-primary" value="Filter" form="source2_form" id="btn_submit_source2">
             </div>
         </div>
     </div>
@@ -56,7 +82,8 @@
 </div>
 
 <button type="button" id="fieldsBtn">Fields</button></br>
-<button type="button" id="sourcesBtn">Primary Sources</button></br>
+<button type="button" id="source1Btn">Primary Sources</button></br>
+<button type="button" id="source2Btn">Secondary Sources</button></br>
 
 <div class="card mx-auto my-auto" style="width: 25rem;">
     <div class="card-body">

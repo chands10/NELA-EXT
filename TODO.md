@@ -17,7 +17,8 @@ Show features with highest std dev (top 10)
 / Make ranges based off min and max of data
 / Dropdown for features
 Move slider text to left
-Fix sources to be more efficient
-Two source filters
+/ Fix sources to be more efficient
+/ Two source filters
 Fix field, source save values
 Move ranges to left
+Ask about source filtering (or/and)

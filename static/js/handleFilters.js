@@ -1,36 +1,50 @@
 $(document).ready(function() {
-    var modal = document.getElementById('fieldsModal');
-    var modal2 = document.getElementById('sourcesModal');
+    var fieldsModal = document.getElementById('fieldsModal');
+    var source1Modal = document.getElementById('source1Modal');
+    var source2Modal = document.getElementById('source2Modal');
 
-    var btn = document.getElementById("fieldsBtn");
-    var btn2 = document.getElementById("sourcesBtn");
+    var fieldsBtn = document.getElementById("fieldsBtn");
+    var source1Btn = document.getElementById("source1Btn");
+    var source2Btn = document.getElementById("source2Btn");
 
-    var span = document.getElementsByClassName("close")[0];
-    var span2 = document.getElementsByClassName("close")[1];
+    var fieldsSpan = document.getElementsByClassName("close")[0];
+    var source1Span = document.getElementsByClassName("close")[1];
+    var source2Span = document.getElementsByClassName("close")[2];
 
 
-    btn.onclick = function() {
-      modal.style.display = "block";
+
+    fieldsBtn.onclick = function() {
+      fieldsModal.style.display = "block";
     }
 
-    btn2.onclick = function() {
-      modal2.style.display = "block";
+    source1Btn.onclick = function() {
+      source1Modal.style.display = "block";
     }
 
-    span.onclick = function() {
-      modal.style.display = "none";
+    source2Btn.onclick = function() {
+      source2Modal.style.display = "block";
     }
 
-    span2.onclick = function() {
-      modal2.style.display = "none";
+    fieldsSpan.onclick = function() {
+      fieldsModal.style.display = "none";
+    }
+
+    source1Span.onclick = function() {
+      source1Modal.style.display = "none";
+    }
+
+    source2Span.onclick = function() {
+      source2Modal.style.display = "none";
     }
 
     window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      } else if (event.target == modal2) {
-        modal2.style.display = "none";
-      }
+      if (event.target == fieldsModal) {
+        fieldsModal.style.display = "none";
+      } else if (event.target == source1Modal) {
+        source1Modal.style.display = "none";
+      } else if (event.target == source2Modal) {
+        source2Modal.style.display = "none";
+      } 
     }
 });
 
@@ -81,7 +95,22 @@ $("#btn_selectall").click(function() {
     reset(selectall, false);
 });
 
-$("#btn_selectall_sources").click(function() {
+$("#btn_selectall_source1").click(function() {
+    const text = $(this).prop("value");
+    let selectall = true;
+
+    if (text === "Select all") {
+        $(this).prop("value", "Deselect all");
+    }
+    else {
+        $(this).prop("value", "Select all");
+        selectall = false;
+    }
+
+    reset(selectall, false);
+});
+
+$("#btn_selectall_source2").click(function() {
     const text = $(this).prop("value");
     let selectall = true;
 
@@ -101,10 +130,12 @@ $(".field-btn").change(function() {
 
     if(activeButtons) { 
         $("#btn_submit1").prop("disabled", false);
-        $("#btn_submit1_sources").prop("disabled", false);
+        $("#btn_submit1_source1").prop("disabled", false);
+        $("#btn_submit1_source2").prop("disabled", false);        
     }
     else {
         $("#btn_submit1").prop("disabled", true);
-        $("#btn_submit1_sources").prop("disabled", false);
+        $("#btn_submit1_source1").prop("disabled", false);
+        $("#btn_submit1_source2").prop("disabled", false);
     }
 });

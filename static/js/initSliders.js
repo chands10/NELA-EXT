@@ -7,7 +7,7 @@ $(".js-range-slider").ionRangeSlider({
 
 $("#btn_reset_fields").click(function() {
     resetSliders();
-    // toggleAlert();
+    toggleAlert(); //in handleFilters.js
 });
 
 function resetSliders() {
