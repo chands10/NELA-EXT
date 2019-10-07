@@ -9,6 +9,7 @@
 / Put everything on same page
 / Reset sliders
 / Have slider values stay updated
+/ Have slider values stay updated when adding fields
 / Date ranges
 Show features with highest std dev (top 10)
 / Get rid of background
@@ -20,5 +21,5 @@ Move slider text to left
 / Fix sources to be more efficient
 / Two source filters
 Fix field, source save values
-Move ranges to left
+/ Move ranges to left
 Ask about source filtering (or/and)

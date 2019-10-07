@@ -33,6 +33,7 @@ Bootstrap(app)
 def range_filter_helper(fields, ranges):
     # Query by the relevant fields
     q = "SELECT "
+    
     for field in fields:
         q += "%s, " % field
         
@@ -58,7 +59,7 @@ def range_filter_helper(fields, ranges):
     today = date.today().strftime('%m/%d/%y')
     form2 = FieldSliders(fields, bounds, ranges)    
     
-    return form2, q, today
+    return form2, today
 
 def find_sources():
     global source1_form
@@ -79,7 +80,7 @@ def find_sources():
     return source1_form, source2_form
     
 
-def table_helper(data, fields, ranges, source1, source2, q):
+def table_helper(data, fields, ranges, source1, source2):
     from_date, to_date = data[-1][1].split(" - ")
 
     # Convert dates from the daterange plugin's format to Year-Month-Day
@@ -91,8 +92,16 @@ def table_helper(data, fields, ranges, source1, source2, q):
     for r in ranges:
         converted_ranges.append(tuple(map(int, r.split(";"))))
 
-    q += " WHERE "
+    # Query by the relevant fields
+    q = "SELECT "
     
+    for field in fields:
+        q += "%s, " % field
+
+    q = q.strip().strip(",")
+    q += " FROM articles WHERE "
+        
+    # Filter by user input field ranges    
     for i in range(len(fields)):
         if not fields[i] in text_fields:
             q += "CAST(%s AS float) >= %f and CAST(%s AS float) <= %f and " % \
@@ -109,14 +118,13 @@ def table_helper(data, fields, ranges, source1, source2, q):
     
         for i in range(len(source1)):
             q += "source1 = '{}'".format(source1[i])
-            if i < len(source1) - 1 or len(source2) > 0:
-                q += " or "
+            q += " or "
         
         for i in range(len(source2)):
             q += "source2 = '{}'".format(source2[i])
-            if i < len(source2) - 1:
-                q += " or "
+            q += " or "
     
+        q = q.strip().strip(" or")
         q += ")"
     
     
@@ -139,13 +147,13 @@ def build_site(data, source1, source2):
     #RangeFilter
     #obtain querydata to determine ranges for sliders
     # Query the POSTGRES database using dynamic SQL        
-    form2, q, today = range_filter_helper(fields, ranges)
+    form2, today = range_filter_helper(fields, ranges)
     
     #Sources
     source1_form, source2_form = find_sources()
     
     #Table
-    table = table_helper(data, fields, ranges, source1, source2, q)
+    table = table_helper(data, fields, ranges, source1, source2)
             
     return render_template("index.html", form=form, form2=form2, source1_form=source1_form, source2_form=source2_form, today=today, table=table)
 
@@ -180,8 +188,23 @@ def range_filter():
     global source2
     global data
     fields = list(request.form)
-    fields = fields[1:]   
-    data = data_converter(fields)
+    fields = fields[1:]  
+    
+    #preserve slider values
+    data2 = data_converter(fields)
+    
+    oldData = dict()
+    for d in data:
+        oldData[d[0]] = d
+        
+        #rebuild data
+        data = []
+        for d in data2:
+            if d[0] in oldData:
+                data.append(oldData[d[0]])
+            else:
+                data.append(d)
+    
     return build_site(data, source1, source2)
 
 @app.route("/source_filter/<source>", methods=["POST"])
