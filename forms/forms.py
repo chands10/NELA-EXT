@@ -16,7 +16,7 @@ field_names = sorted([column.key for column in Articles.__table__.columns if not
 field_names = text_fields + field_names
 
 # Required for checkbox initialization
-field_tuples = [(x, True) for x in field_names[4:9]] + [(x, False) for x in field_names[10:-1]]
+field_tuples = [(x, True) for x in field_names[4:9]] + [(x, False) for x in field_names[9:-1]]
 
 """ Multiple checkbox (buttons) form for DB fields """
 

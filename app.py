@@ -130,7 +130,7 @@ def table_helper(data, fields, ranges, source1, source2, q):
     table = makeHTMLTable(fields, results)      
     return table
     
-def buildSite(data, source1, source2):
+def build_site(data, source1, source2):
     fields, ranges = zip(*(data[:-1]))
 
     #Field Selection
@@ -138,9 +138,7 @@ def buildSite(data, source1, source2):
     
     #RangeFilter
     #obtain querydata to determine ranges for sliders
-    # Query the POSTGRES database using dynamic SQL    
-    cursor.execute("select * from Articles")
-    
+    # Query the POSTGRES database using dynamic SQL        
     form2, q, today = range_filter_helper(fields, ranges)
     
     #Sources
@@ -151,7 +149,7 @@ def buildSite(data, source1, source2):
             
     return render_template("index.html", form=form, form2=form2, source1_form=source1_form, source2_form=source2_form, today=today, table=table)
 
-def dataConverter(fields):
+def data_converter(fields):
     data = [(field, '-100;100') for field in fields]
     
     today = date.today().strftime('%m/%d/%Y')
@@ -165,8 +163,8 @@ def index():
     global source2
     global data
     fields = text_fields[4:-1]
-    data = dataConverter(fields)
-    return buildSite(data, source1, source2)
+    data = data_converter(fields)
+    return build_site(data, source1, source2)
 
 @app.route("/about")
 def about():
@@ -183,8 +181,8 @@ def range_filter():
     global data
     fields = list(request.form)
     fields = fields[1:]   
-    data = dataConverter(fields)
-    return buildSite(data, source1, source2)
+    data = data_converter(fields)
+    return build_site(data, source1, source2)
 
 @app.route("/source_filter/<source>", methods=["POST"])
 def source_filter(source):
@@ -203,7 +201,7 @@ def source_filter(source):
         if len(source2) == 0: #no sources
             source2.append("")
 
-    return buildSite(data, source1, source2)
+    return build_site(data, source1, source2)
 
 @app.route("/data", methods=["POST"])
 def data():    
@@ -211,7 +209,7 @@ def data():
     global source1
     global source2
     data = [(k, v) for k, v in request.form.items()] 
-    return buildSite(data, source1, source2)
+    return build_site(data, source1, source2)
 
 if __name__ == "__main__":
     app.run()
