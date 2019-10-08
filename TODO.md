@@ -6,10 +6,10 @@
 
 * Show features with highest std dev (top 10)
 * Move slider text to left
-* Convert fields to numbers so can use min/max
 * Ask about source filtering (or/and)
 
 # DONE
+* Uses min and max SQL query to find slider bounds
 * Fix field, source save values
 * Refactored so that initial checkboxes are handled in forms.py rather than handleFilters.js
 * Have slider values stay updated

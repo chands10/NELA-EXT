@@ -46,11 +46,18 @@ def field_selector(fields):
     return form
     
 def range_filter_helper(fields, ranges):
+    #find fields with bounds
+    num_fields = []
+    for field in fields:
+        if not field in text_fields:
+            num_fields.append(field)
+            
     # Query by the relevant fields
     q = "SELECT "
     
-    for field in fields:
-        q += "%s, " % field
+    for field in num_fields:
+        q += "min(CAST(%s AS float)), " % field
+        q += "max(CAST(%s AS float)), " % field
         
     # Filter by user input field ranges
     q = q.strip().strip(",")
@@ -60,17 +67,15 @@ def range_filter_helper(fields, ranges):
     cursor.execute(q)
     
     # Fetch all results of the query
-    results = cursor.fetchall()
+    results = cursor.fetchall()[0]
     
     #find min and max for each relevant field
     bounds = dict()
-    for i in range(len(fields)):
-        if not fields[i] in text_fields:
-            currentField = [float(x[i]) for x in results]
-            currentMin = floor(min(currentField))
-            currentMax = ceil(max(currentField))
-            bounds[fields[i]] = (currentMin, currentMax)
-    
+    for i in range(len(num_fields)):
+        lower = floor(results[2 * i]) #min value for field
+        upper = ceil(results[2 * i + 1]) #max value for field
+        bounds[num_fields[i]] = (lower, upper)
+        
     today = date.today().strftime('%m/%d/%y')
     form2 = FieldSliders(fields, bounds, ranges)    
     
