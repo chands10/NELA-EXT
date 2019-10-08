@@ -9,7 +9,7 @@ from sqlalchemy.orm import load_only
 from sqlalchemy import and_, or_
 from database import db_session, POSTGRES, SQLALCHEMY_DATABASE_URI, cursor
 from models.models import Articles
-from forms.forms import FieldSelection, FieldSliders, text_fields, makeHTMLTable, SourceSelection
+from forms.forms import FieldSelection, FieldSliders, text_fields, makeHTMLTable
 from datetime import date, datetime
 from math import floor, ceil
 import psycopg2 as dbapi
@@ -23,13 +23,28 @@ app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 
 #globals
 data = -1
-source1_form = -1
+formatted_source1 = -1
 source1 = []
-source2_form = -1
+formatted_source2 = -1
 source2 = []
+
+# Query attribute/field names from the database
+field_names = sorted([column.key for column in Articles.__table__.columns if not column.key in text_fields])
+field_names = text_fields + field_names
 
 Bootstrap(app)
 
+def field_selector(fields):
+    global field_names
+    
+    fields2 = set(fields)
+    # Required for checkbox initialization
+    field_tuples = [(x, x in fields2) for x in field_names[4:8]] + [(x, x in fields2) for x in field_names[8:]]  
+    
+    form = FieldSelection(field_tuples)
+    
+    return form
+    
 def range_filter_helper(fields, ranges):
     # Query by the relevant fields
     q = "SELECT "
@@ -61,21 +76,29 @@ def range_filter_helper(fields, ranges):
     
     return form2, today
 
-def find_sources():
-    global source1_form
-    global source2_form
+def find_sources(source1, source2):
+    global formatted_source1
+    global formatted_source2
     
     #find all sources in data (only need to do once)
-    if source1_form == -1 or source2_form == -1:   
+    if formatted_source1 == -1 or formatted_source2 == -1:   
         cursor.execute("SELECT DISTINCT source1 FROM articles")
         all_source1 = cursor.fetchall() #format: list of tuples
         formatted_source1 = [(x[0], True) for x in all_source1]
-        source1_form = SourceSelection(formatted_source1)
         
         cursor.execute("SELECT DISTINCT source2 FROM articles")
         all_source2 = cursor.fetchall() #format: list of tuples
         formatted_source2 = [(x[0], True) for x in all_source2]
-        source2_form = SourceSelection(formatted_source2)
+    
+    if len(source1) > 0:
+        c = set(source1)
+        formatted_source1 = [(x[0], x[0] in c) for x in formatted_source1]
+    if len(source2) > 0:
+        c = set(source2)
+        formatted_source2 = [(x[0], x[0] in c) for x in formatted_source2]
+
+    source1_form = FieldSelection(formatted_source1)
+    source2_form = FieldSelection(formatted_source2)
     
     return source1_form, source2_form
     
@@ -142,7 +165,7 @@ def build_site(data, source1, source2):
     fields, ranges = zip(*(data[:-1]))
 
     #Field Selection
-    form = FieldSelection()
+    form = field_selector(fields)
     
     #RangeFilter
     #obtain querydata to determine ranges for sliders
@@ -150,7 +173,7 @@ def build_site(data, source1, source2):
     form2, today = range_filter_helper(fields, ranges)
     
     #Sources
-    source1_form, source2_form = find_sources()
+    source1_form, source2_form = find_sources(source1, source2)
     
     #Table
     table = table_helper(data, fields, ranges, source1, source2)
@@ -188,7 +211,6 @@ def range_filter():
     global source2
     global data
     fields = list(request.form)
-    fields = fields[1:]  
     
     #preserve slider values
     data2 = data_converter(fields)

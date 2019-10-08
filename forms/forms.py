@@ -11,13 +11,6 @@ from models.models import Articles
 text_fields = ["title1", "title2", "source1", "source2", "normal_display", "sources_display", \
     "title1_date", "title2_date", "lower_display"]
 
-# Query attribute/field names from the database
-field_names = sorted([column.key for column in Articles.__table__.columns if not column.key in text_fields])
-field_names = text_fields + field_names
-
-# Required for checkbox initialization
-field_tuples = [(x, True) for x in field_names[4:9]] + [(x, False) for x in field_names[9:-1]]
-
 """ Multiple checkbox (buttons) form for DB fields """
 
 def select_multi_checkbox(fields, ul_class="", **kwargs):
@@ -29,29 +22,24 @@ def select_multi_checkbox(fields, ul_class="", **kwargs):
     for label, checked in fields:
         field_id = "%s" % (label)
         options = dict(kwargs, name=label, id=field_id)
-        html.append("<li><label class='btn btn-light btn-block'>")
-        html.append("<input type='checkbox' autocomplete='off' class='invisible field-btn'" \
+        check = ""
+        if checked:
+            check = " active"
+        html.append("<li><label class='btn btn-light btn-block{}'>".format(check))
+        if checked:
+            check = " checked = 'checked'"
+        html.append("<input type='checkbox'%s autocomplete='off' class='invisible field-btn'" \
             "%s>%s</label></li>" % 
-                    (html_params(**options), field_id))
+                    (check, html_params(**options), field_id))
     html.append("</div>")
     html.append("</ul>")
     html.append("</div>")
     return "".join(html)
 
 class FieldSelection(FlaskForm):
-    #Fields = None
-    Fields = Markup(select_multi_checkbox( fields=field_tuples ) )
-    #def __init__(self, fields2):
-        #fields2 = set(fields2)
-        ## Required for checkbox initialization
-        #field_tuples = [(x, x in fields2) for x in field_names[4:-1]]
-        #self.Fields = Markup(select_multi_checkbox( fields=field_tuples ) )
-
-class SourceSelection(FlaskForm):
-    Sources = None
-    def __init__(self, source_tuples):
-        self.Sources = Markup(select_multi_checkbox( fields=source_tuples ) )
-
+    Fields = None
+    def __init__(self, field_tuples):
+        self.Fields = Markup(select_multi_checkbox( fields=field_tuples ) )
 
 """ Multiple slider form for DB field filtering """
 """ Sliders are initialized in initSliders.js   """

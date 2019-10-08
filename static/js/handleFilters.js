@@ -69,7 +69,7 @@ function toggleAlert(){
     return false; // Keep close.bs.alert event from removing from DOM
 }
 
-reset(false, true);
+//reset(false, true);
 
 /////////////////////////////////////////////////////////////
 /** Reset, Select All/Deselect, and Submit button handlers */

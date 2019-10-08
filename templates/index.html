@@ -41,7 +41,7 @@
             <form method="POST" action="{{ url_for('source_filter',source='source1') }}" id="source1_form">
                 {{ source1_form.csrf_token }}
                 <div id="fields_row" class="pt-2" align="center">
-                    {{ source1_form.Sources }}
+                    {{ source1_form.Fields }}
                 </div>
             </form>
             <div class="card-footer text-center" >
@@ -67,7 +67,7 @@
             <form method="POST" action="{{ url_for('source_filter',source='source2') }}" id="source2_form">
                 {{ source2_form.csrf_token }}
                 <div id="fields_row" class="pt-2" align="center">
-                    {{ source2_form.Sources }}
+                    {{ source2_form.Fields }}
                 </div>
             </form>
             <div class="card-footer text-center" >
