@@ -7,11 +7,11 @@
 * Show features with highest std dev (top 10)
 * Move slider text to left
 * Fix CSS for table
-* Ask about no fields displayed
+* Fix no fields displayed not blocking submit button
 
 # DONE
 * Fix source filtering to use and
-* Make no sources selected equal to all sources selected
+* Make no sources/fields selected equal to all sources/fields selected (temporary fix?)
 * Fix updated date not being displayed
 * Range reset button resets date
 * Style buttons

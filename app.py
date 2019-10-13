@@ -220,20 +220,22 @@ def range_filter():
     global data
     fields = list(request.form)
     
-    #preserve slider values
-    data2 = data_converter(fields)
-    
-    oldData = dict()
-    for d in data:
-        oldData[d[0]] = d
+    #some field selected
+    if len(fields) > 0:
+        #preserve slider values
+        data2 = data_converter(fields)
         
-        #rebuild data
-        data = []
-        for d in data2:
-            if d[0] in oldData:
-                data.append(oldData[d[0]])
-            else:
-                data.append(d)
+        oldData = dict()
+        for d in data:
+            oldData[d[0]] = d
+            
+            #rebuild data
+            data = []
+            for d in data2:
+                if d[0] in oldData:
+                    data.append(oldData[d[0]])
+                else:
+                    data.append(d)
     
     return build_site(data, source1, source2)
 
