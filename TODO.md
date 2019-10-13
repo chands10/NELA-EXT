@@ -6,9 +6,16 @@
 
 * Show features with highest std dev (top 10)
 * Move slider text to left
-* Ask about source filtering (or/and)
+* Fix CSS for table
+* Ask about no fields displayed
 
 # DONE
+* Fix source filtering to use and
+* Make no sources selected equal to all sources selected
+* Fix updated date not being displayed
+* Range reset button resets date
+* Style buttons
+
 * Uses min and max SQL query to find slider bounds
 * Fix field, source save values
 * Refactored so that initial checkboxes are handled in forms.py rather than handleFilters.js

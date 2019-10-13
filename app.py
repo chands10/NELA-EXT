@@ -76,10 +76,9 @@ def range_filter_helper(fields, ranges):
         upper = ceil(results[2 * i + 1]) #max value for field
         bounds[num_fields[i]] = (lower, upper)
         
-    today = date.today().strftime('%m/%d/%y')
     form2 = FieldSliders(fields, bounds, ranges)    
     
-    return form2, today
+    return form2
 
 def find_sources(source1, source2):
     global formatted_source1
@@ -140,21 +139,24 @@ def table_helper(data, fields, ranges, source1, source2):
     q += "title1_date >= '%s' and title1_date" \
          "<= '%s'" % (from_date, to_date)
     
-    # Filter by sources (using or statements only)
-    if len(source1) + len(source2) > 0:
+    # Filter by sources
+    if len(source1) > 0:
         q += " and ("
-    
         for i in range(len(source1)):
             q += "source1 = '{}'".format(source1[i])
             q += " or "
         
+        q = q.strip().strip(" or")
+        q += ")"
+           
+    if len(source2) > 0:
+        q += " and ("      
         for i in range(len(source2)):
             q += "source2 = '{}'".format(source2[i])
             q += " or "
     
         q = q.strip().strip(" or")
         q += ")"
-    
     
     # Execute the query
     cursor.execute(q)
@@ -168,6 +170,7 @@ def table_helper(data, fields, ranges, source1, source2):
     
 def build_site(data, source1, source2):
     fields, ranges = zip(*(data[:-1]))
+    daterange = data[-1][1]
 
     #Field Selection
     form = field_selector(fields)
@@ -175,7 +178,7 @@ def build_site(data, source1, source2):
     #RangeFilter
     #obtain querydata to determine ranges for sliders
     # Query the POSTGRES database using dynamic SQL        
-    form2, today = range_filter_helper(fields, ranges)
+    form2 = range_filter_helper(fields, ranges)
     
     #Sources
     source1_form, source2_form = find_sources(source1, source2)
@@ -183,7 +186,7 @@ def build_site(data, source1, source2):
     #Table
     table = table_helper(data, fields, ranges, source1, source2)
             
-    return render_template("index.html", form=form, form2=form2, source1_form=source1_form, source2_form=source2_form, today=today, table=table)
+    return render_template("index.html", form=form, form2=form2, source1_form=source1_form, source2_form=source2_form, daterange=daterange, table=table)
 
 def data_converter(fields):
     data = [(field, '-100;100') for field in fields]
@@ -242,14 +245,14 @@ def source_filter(source):
     if source == "source1":
         source1 = list(request.form)
         
-        if len(source1) == 0: #no sources
-            source1.append("")
+        #if len(source1) == 0: #no sources
+            #source1.append("")
     
     elif source == "source2":
         source2 = list(request.form)
         
-        if len(source2) == 0: #no sources
-            source2.append("")
+        #if len(source2) == 0: #no sources
+            #source2.append("")
 
     return build_site(data, source1, source2)
 

@@ -81,9 +81,9 @@
 
 </div>
 
-<button type="button" id="fieldsBtn">Fields</button></br>
-<button type="button" id="source1Btn">Primary Sources</button></br>
-<button type="button" id="source2Btn">Secondary Sources</button></br>
+<input type="button" class="btn btn-info" value="Fields" id="fieldsBtn">
+<input type="button" class="btn btn-info" value="Primary Sources" id="source1Btn">
+<input type="button" class="btn btn-info" value="Secondary Sources" id="source2Btn">
 
 <div class="card" style="width: 25rem;">
     <div class="card-body">
@@ -96,7 +96,7 @@
         </form>
         <div class="card-footer text-center">
             <input type="text" id="daterange" name="daterange" form="sliders_form" style="text-align: center;" 
-                value="01/01/2010 - {{ today }}" align="center">
+                value="{{ daterange }}" align="center">
             <input type="submit" class="btn btn-primary" value="Filter" form="sliders_form" id="btn_submit2">
             <input type="button" class="btn btn-warning" value="Reset" id="btn_reset_fields">
         </div>
