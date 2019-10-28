@@ -4,14 +4,28 @@
 * Consolidate js init files to a single file
 * Use unminified files for dev and then minify for production
 
-* Show features with highest std dev (top 10)
 * Move slider text to left
 * Fix CSS for table
 * Fix no fields displayed not blocking submit button
+* Use title fields
+* Master reset/filter button
+* Ask about match display
+* Use dictionary for user friendly names (Ask about dictionary implementation)
+* Use sessions to have one master filter button
+* Make space smaller under and to side of ranges
+
 
 # DONE
+* Style CSS with NELA Toolkit Github (partially done)
+* Ignore those without --
+* Create matches table
+* Show features with highest std dev (top 5)
+* Rename fields to features
+* Moved buttons down
+
 * Fix source filtering to use and
-* Make no sources/fields selected equal to all sources/fields selected (temporary fix?)
+* Make no sources selected equal to all sources selected
+* No fields selected leaves prior fields selected (temporary fix?)
 * Fix updated date not being displayed
 * Range reset button resets date
 * Style buttons

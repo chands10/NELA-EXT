@@ -21,9 +21,9 @@
 
 <body>
     <!-- NAVBAR -->
-    <nav class="navbar fixed-top device-fixed-height pt-1 navbar-expand-lg navbar-dark" style="background-color:#930000;">
+    <nav class="navbar fixed-top device-fixed-height pt-1 navbar-expand-lg navbar-dark" style="background-color:#222;">
         <a class="navbar-brand" href="{{ url_for('index') }}">
-            <img src="{{ url_for('static', filename='nela_logo.png') }}" alt="Logo">
+            <img id="navLogo" src="{{ url_for('static', filename='logo_small_trans.png') }}" alt="Logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" 
             aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,21 @@
             </ul>
         </div>
     </nav>
+
+<!--     <nav class="navbar navbar-inverse navbar-fixed-top" style="z-index: 3"> 
+                    <a href="/"><img id ="navLogo" class="navbar-brand" src="/static/logo_small_trans.png"></img></a>
+            <ul class="nav navbar-nav navbar-right">
+                <li> 
+                    <a href="/about"> About </a>
+                </li>
+                <li> 
+                    <a href="/datasetRequest"> Datasets </a>
+                </li>
+                <li>
+                    <a style="padding-right:50px" href="/help"> Help </a>
+                </li>
+            </ul>
+        </nav> -->
 
     <div class="wrap">
         {% block content %} {% endblock %}

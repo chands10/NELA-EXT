@@ -196,13 +196,47 @@ def data_converter(fields):
     data.append(('daterange', daterange))
     return data
 
+#return top 5 fields with highest std devs
+def high_std_dev_fields():
+    field_names = [column.key for column in Articles.__table__.columns if not column.key in text_fields]
+    q = "SELECT "
+    for field in field_names:
+        q += "STDDEV({}::numeric), ".format(field)
+        
+    q = q.strip().strip(",")
+    q += " FROM articles"
+    cursor.execute(q)
+    results = cursor.fetchall()
+    
+    combined = []
+    for i in range(len(results[0])):
+        result = results[0][i]
+        combined.append((result, field_names[i]))
+    
+    combined.sort(reverse=True)    
+    return sorted([combined[i][1] for i in range(5)])
+
+#def feature_differences_creator():
+    #field_names = sorted([column.key for column in Articles.__table__.columns if not column.key in text_fields])
+    #q = "create view feature_differences(id1,id2,matchdisplay,"
+    #q += ",".join(field_names)
+    #q += ") as SELECT m.id1, m.id2, m.matchdisplay"
+    #for field in field_names:
+        #q += ", af2.{}-af1.{}".format(field, field)
+        
+    #q += "FROM article_features af1, article_features af2, matches m WHERE m.id1 = af1.id and m.id2 = af2.id;"
+    
+    #q += " create table title_comparison as select * from feature_differences;"
+    #cursor.execute(q)
+
 @app.route("/")
 def index():
     global source1
     global source2
     global data
     fields = text_fields[4:-1]
-    data = data_converter(fields)
+    top_std_dev = high_std_dev_fields()
+    data = data_converter(fields + top_std_dev)
     return build_site(data, source1, source2)
 
 @app.route("/about")
@@ -246,16 +280,8 @@ def source_filter(source):
     global data
     if source == "source1":
         source1 = list(request.form)
-        
-        #if len(source1) == 0: #no sources
-            #source1.append("")
-    
     elif source == "source2":
         source2 = list(request.form)
-        
-        #if len(source2) == 0: #no sources
-            #source2.append("")
-
     return build_site(data, source1, source2)
 
 @app.route("/data", methods=["POST"])

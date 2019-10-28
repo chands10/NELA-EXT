@@ -35,6 +35,23 @@ body {
     height: 50px;
 }
 
+#navLogo {
+  height: 100px;
+  margin-left: -70px;
+  margin-top: -25px;
+  margin-bottom: -40px;
+}
+
+/*nav {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  display: block;
+}
+*/
 nav {
     position: fixed;
     height: 80px;
@@ -52,7 +69,7 @@ nav {
 }
 
 .navbar-collapse { 
-    background:#930000; /*replace with desired color*/ 
+    background:#222; /*replace with desired color*/ 
 } 
 
 .field-slider {
