@@ -7,10 +7,10 @@
 * Move slider text to left
 * Fix CSS for table
 * Fix no fields displayed not blocking submit button?
-* Master reset/filter button (Use sessions to have one master filter button)
 * Make space smaller under and to side of ranges
 
 # DONE
+* Master reset/filter button (Use sessions to have one master filter button)
 * Change match_display to normal_display, lower_display, sources_display, Title1, Title2, Source1, Source2, title1_date, title2_date
 * Use title_comparisons instead of articles
 * Use dictionary for user friendly names

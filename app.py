@@ -3,7 +3,7 @@
     - SQLAlchemy DB helper functions
     - psycopg2 PostgreSQL DB adapter """
     
-from flask import Flask, render_template, json, jsonify, request, redirect, url_for
+from flask import Flask, render_template, json, jsonify, request, redirect, session, url_for
 from flask_bootstrap import Bootstrap
 from sqlalchemy.orm import load_only
 from sqlalchemy import and_, or_
@@ -23,10 +23,11 @@ app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 
 #globals
 data = -1
-formatted_source1 = -1
+all_source1 = []
 source1 = []
-formatted_source2 = -1
+all_source2 = []
 source2 = []
+top_std_dev = -1
 
 # Query attribute/field names from the database
 #numeric_field_names = sorted([column.key for column in Articles.__table__.columns if not column.key in text_fields])
@@ -49,9 +50,6 @@ def field_selector(fields):
 def range_filter_helper(fields, ranges):
     #find fields with bounds
     num_fields = [field for field in fields if not field in text_fields]
-    #for field in fields:
-        #if not field in text_fields:
-            #num_fields.append(field)
             
     # Query by the relevant fields
     q = "SELECT "
@@ -69,7 +67,8 @@ def range_filter_helper(fields, ranges):
     cursor.execute(q)
     
     # Fetch all results of the query
-    results = cursor.fetchall()[0]
+    try:
+        results = cursor.fetchall()[0]
     
     #find min and max for each relevant field
     bounds = dict()
@@ -86,27 +85,29 @@ def range_filter_helper(fields, ranges):
     return form2
 
 def find_sources(source1, source2):
-    global formatted_source1
-    global formatted_source2
+    global all_source1
+    global all_source2
     
     #find all sources in data (only need to do once)
-    if formatted_source1 == -1 or formatted_source2 == -1:   
+    if len(all_source1) == 0 or len(all_source2) == 0:   
         #cursor.execute("SELECT DISTINCT source1 FROM articles")
         cursor.execute("SELECT DISTINCT source1 FROM title_comparison")
         all_source1 = cursor.fetchall() #format: list of tuples
-        formatted_source1 = [(x[0], True) for x in all_source1]
+        all_source1 = [x[0] for x in all_source1]
+        formatted_source1 = [(x, True) for x in all_source1]
         
         #cursor.execute("SELECT DISTINCT source2 FROM articles")
         cursor.execute("SELECT DISTINCT source2 FROM title_comparison")
         all_source2 = cursor.fetchall() #format: list of tuples
-        formatted_source2 = [(x[0], True) for x in all_source2]
+        all_source2 = [x[0] for x in all_source2]
+        formatted_source2 = [(x, True) for x in all_source2]
     
     if len(source1) > 0:
         c = set(source1)
-        formatted_source1 = [(x[0], x[0] in c) for x in formatted_source1]
+        formatted_source1 = [(x, x in c) for x in all_source1]
     if len(source2) > 0:
         c = set(source2)
-        formatted_source2 = [(x[0], x[0] in c) for x in formatted_source2]
+        formatted_source2 = [(x, x in c) for x in all_source2]
 
     source1_form = FieldSelection(formatted_source1)
     source2_form = FieldSelection(formatted_source2)
@@ -230,8 +231,15 @@ def index():
     global source1
     global source2
     global data
+    global top_std_dev
+    
     fields = text_fields[4:8]
-    top_std_dev = high_std_dev_fields()
+    if top_std_dev == -1:
+        top_std_dev = high_std_dev_fields()
+        
+    source1 = all_source1[:]
+    source2 = all_source2[:]
+        
     data = data_converter(fields + top_std_dev)
     return build_site(data, source1, source2)
 
@@ -273,12 +281,13 @@ def range_filter():
 def source_filter(source):
     global source1
     global source2
-    global data
+    #global data
     if source == "source1":
         source1 = list(request.form)
     elif source == "source2":
         source2 = list(request.form)
-    return build_site(data, source1, source2)
+    #return build_site(data, source1, source2)
+    return '', 204
 
 @app.route("/data", methods=["POST"])
 def data():    

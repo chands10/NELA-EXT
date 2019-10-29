@@ -139,3 +139,9 @@ $(".field-btn").change(function() {
         $("#btn_submit1_source2").prop("disabled", false);
     }
 });
+
+function submitForms() {
+    document.getElementById("source1_form").submit();
+    document.getElementById("source2_form").submit();
+    document.getElementById("sliders_form").submit();
+}

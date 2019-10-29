@@ -47,7 +47,7 @@
             <div class="card-footer text-center" >
                 <!-- Button logic is written in static/js/handerFilters.js -->
                 <input type="button" class="btn btn-info" value="Select all" id="btn_selectall_source1">
-                <input type="submit" class="btn btn-primary" value="Filter" form="source1_form" id="btn_submit_source1">
+                <!-- <input type="submit" class="btn btn-primary" value="Filter" form="source1_form" id="btn_submit_source1"> -->
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@
             <div class="card-footer text-center" >
                 <!-- Button logic is written in static/js/handerFilters.js -->
                 <input type="button" class="btn btn-info" value="Select all" id="btn_selectall_source2">
-                <input type="submit" class="btn btn-primary" value="Filter" form="source2_form" id="btn_submit_source2">
+                <!-- <input type="submit" class="btn btn-primary" value="Filter" form="source2_form" id="btn_submit_source2"> -->
             </div>
         </div>
     </div>
@@ -97,8 +97,10 @@
                 value="{{ daterange }}" align="center">
             <input type="button" class="btn btn-info" value="Primary Sources" id="source1Btn">
             <input type="button" class="btn btn-info" value="Secondary Sources" id="source2Btn">
-            <input type="submit" class="btn btn-primary" value="Filter" form="sliders_form" id="btn_submit2">
-            <input type="button" class="btn btn-warning" value="Reset" id="btn_reset_fields">
+            <!-- <input type="submit" class="btn btn-primary" value="Filter" form="sliders_form" id="btn_submit2"> -->
+            <input type="submit" class="btn btn-primary" value="Filter" onclick="submitForms()">
+            <!-- <input type="button" class="btn btn-warning" value="Reset" id="btn_reset_fields"> -->
+            <input type="button" class="btn btn-warning" value="Reset" onclick="window.location.href = '{{ url_for('index') }}'">
         </div>
     </div>
 </div>
