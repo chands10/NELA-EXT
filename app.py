@@ -8,7 +8,7 @@ from flask_bootstrap import Bootstrap
 from sqlalchemy.orm import load_only
 from sqlalchemy import and_, or_
 from database import db_session, POSTGRES, SQLALCHEMY_DATABASE_URI, cursor
-from models.models import Articles
+from models.models import Articles, Title_Comparison
 from forms.forms import FieldSelection, FieldSliders, text_fields, makeHTMLTable
 from datetime import date, datetime
 from math import floor, ceil
@@ -29,8 +29,9 @@ formatted_source2 = -1
 source2 = []
 
 # Query attribute/field names from the database
-field_names = sorted([column.key for column in Articles.__table__.columns if not column.key in text_fields])
-field_names = text_fields + field_names
+#numeric_field_names = sorted([column.key for column in Articles.__table__.columns if not column.key in text_fields])
+numeric_field_names = sorted([column.key for column in Title_Comparison.__table__.columns if not column.key in text_fields])
+field_names = text_fields + numeric_field_names
 
 Bootstrap(app)
 
@@ -47,10 +48,10 @@ def field_selector(fields):
     
 def range_filter_helper(fields, ranges):
     #find fields with bounds
-    num_fields = []
-    for field in fields:
-        if not field in text_fields:
-            num_fields.append(field)
+    num_fields = [field for field in fields if not field in text_fields]
+    #for field in fields:
+        #if not field in text_fields:
+            #num_fields.append(field)
             
     # Query by the relevant fields
     q = "SELECT "
@@ -61,7 +62,8 @@ def range_filter_helper(fields, ranges):
         
     # Filter by user input field ranges
     q = q.strip().strip(",")
-    q += " FROM articles"
+    #q += " FROM articles"
+    q += " FROM title_comparison"
     
     # Execute the query
     cursor.execute(q)
@@ -72,9 +74,12 @@ def range_filter_helper(fields, ranges):
     #find min and max for each relevant field
     bounds = dict()
     for i in range(len(num_fields)):
-        lower = floor(results[2 * i]) #min value for field
-        upper = ceil(results[2 * i + 1]) #max value for field
-        bounds[num_fields[i]] = (lower, upper)
+        try:
+            lower = floor(results[2 * i]) #min value for field
+            upper = ceil(results[2 * i + 1]) #max value for field
+            bounds[num_fields[i]] = (lower, upper)
+        except:
+            bounds[num_fields[i]] = (-100, 100)
         
     form2 = FieldSliders(fields, bounds, ranges)    
     
@@ -86,11 +91,13 @@ def find_sources(source1, source2):
     
     #find all sources in data (only need to do once)
     if formatted_source1 == -1 or formatted_source2 == -1:   
-        cursor.execute("SELECT DISTINCT source1 FROM articles")
+        #cursor.execute("SELECT DISTINCT source1 FROM articles")
+        cursor.execute("SELECT DISTINCT source1 FROM title_comparison")
         all_source1 = cursor.fetchall() #format: list of tuples
         formatted_source1 = [(x[0], True) for x in all_source1]
         
-        cursor.execute("SELECT DISTINCT source2 FROM articles")
+        #cursor.execute("SELECT DISTINCT source2 FROM articles")
+        cursor.execute("SELECT DISTINCT source2 FROM title_comparison")
         all_source2 = cursor.fetchall() #format: list of tuples
         formatted_source2 = [(x[0], True) for x in all_source2]
     
@@ -126,7 +133,8 @@ def table_helper(data, fields, ranges, source1, source2):
         q += "%s, " % field
 
     q = q.strip().strip(",")
-    q += " FROM articles WHERE "
+    #q += " FROM articles WHERE "
+    q += " FROM title_comparison WHERE "
         
     # Filter by user input field ranges    
     for i in range(len(fields)):
@@ -198,43 +206,31 @@ def data_converter(fields):
 
 #return top 5 fields with highest std devs
 def high_std_dev_fields():
-    field_names = [column.key for column in Articles.__table__.columns if not column.key in text_fields]
+    global numeric_field_names
     q = "SELECT "
-    for field in field_names:
+    for field in numeric_field_names:
         q += "STDDEV({}::numeric), ".format(field)
         
     q = q.strip().strip(",")
-    q += " FROM articles"
+    #q += " FROM articles"
+    q += " FROM title_comparison"
     cursor.execute(q)
     results = cursor.fetchall()
     
     combined = []
     for i in range(len(results[0])):
         result = results[0][i]
-        combined.append((result, field_names[i]))
+        combined.append((result, numeric_field_names[i]))
     
     combined.sort(reverse=True)    
     return sorted([combined[i][1] for i in range(5)])
-
-#def feature_differences_creator():
-    #field_names = sorted([column.key for column in Articles.__table__.columns if not column.key in text_fields])
-    #q = "create view feature_differences(id1,id2,matchdisplay,"
-    #q += ",".join(field_names)
-    #q += ") as SELECT m.id1, m.id2, m.matchdisplay"
-    #for field in field_names:
-        #q += ", af2.{}-af1.{}".format(field, field)
-        
-    #q += "FROM article_features af1, article_features af2, matches m WHERE m.id1 = af1.id and m.id2 = af2.id;"
-    
-    #q += " create table title_comparison as select * from feature_differences;"
-    #cursor.execute(q)
 
 @app.route("/")
 def index():
     global source1
     global source2
     global data
-    fields = text_fields[4:-1]
+    fields = text_fields[4:8]
     top_std_dev = high_std_dev_fields()
     data = data_converter(fields + top_std_dev)
     return build_site(data, source1, source2)
