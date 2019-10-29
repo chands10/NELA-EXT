@@ -4,12 +4,11 @@
 * Consolidate js init files to a single file
 * Use unminified files for dev and then minify for production
 
-* Move slider text to left
 * Fix CSS for table
 * Fix no fields displayed not blocking submit button?
-* Make space smaller under and to side of ranges
 
 # DONE
+* Make space smaller under and to side of ranges
 * Master reset/filter button (Use sessions to have one master filter button)
 * Change match_display to normal_display, lower_display, sources_display, Title1, Title2, Source1, Source2, title1_date, title2_date
 * Use title_comparisons instead of articles

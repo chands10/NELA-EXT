@@ -59,7 +59,7 @@ class FieldSelection(FlaskForm):
 
 def multi_field_sliders(fields, bounds, ranges, ul_class="", **kwargs):
     kwargs.setdefault("type", "text")
-    html = ["<div class='sliders-container' align='center' style='border:2px solid #ccc; width:350px; height: " \
+    html = ["<div class='sliders-container' align='center' style='border:2px solid #ccc; width:300px; height: " \
         "375px; overflow-y: scroll;'>"]
     html.append("<ul %s style='list-style-type: none;'>" % (html_params(id="fields", class_=ul_class)))
     for i in range(len(fields)):
@@ -82,7 +82,7 @@ def multi_field_sliders(fields, bounds, ranges, ul_class="", **kwargs):
         slider_settings = "data-type='double' data-min='{0}' data-max='{1}' data-from='{2}' data-to='{3}' data-grid='true'".format(currentBound[0], currentBound[1], currentRange[0], currentRange[1])
         options = dict(kwargs, name=field, id=slider_id)
         hidden_option = "hidden" if slider_id in text_fields else ""
-        html.append("<li %s><div class='pl-4 pt-5 bd-highlight field-slider' id='%s_container'>" % (hidden_option, slider_id))
+        html.append("<li %s><div class='bd-highlight field-slider' id='%s_container'>" % (hidden_option, slider_id))
         html.append("<input %s class='js-range-slider' %s/> " % (html_params(**options), slider_settings))
         html.append("<label for='%s' class='slider-label'>%s</label></div></li>" % (slider_id, convertToUser(slider_id)))
     html.append("</ul>")

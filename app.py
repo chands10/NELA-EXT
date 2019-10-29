@@ -3,7 +3,7 @@
     - SQLAlchemy DB helper functions
     - psycopg2 PostgreSQL DB adapter """
     
-from flask import Flask, render_template, json, jsonify, request, redirect, session, url_for
+from flask import Flask, render_template, json, jsonify, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from sqlalchemy.orm import load_only
 from sqlalchemy import and_, or_
@@ -69,6 +69,8 @@ def range_filter_helper(fields, ranges):
     # Fetch all results of the query
     try:
         results = cursor.fetchall()[0]
+    except:
+        pass
     
     #find min and max for each relevant field
     bounds = dict()
