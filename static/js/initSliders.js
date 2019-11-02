@@ -5,11 +5,13 @@ $(".js-range-slider").ionRangeSlider({
     grid_num: -1
 });
 
+//DEAD CODE
 $("#btn_reset_fields").click(function() {
     resetSliders();
     toggleAlert(); //in handleFilters.js
 });
 
+//DEAD CODE
 function resetSliders() {
 	sliders = $(".js-range-slider");
      jQuery(sliders).each(function(index,slider){

@@ -81,48 +81,15 @@ $("#btn_reset").click(function() {
 });
 
 $("#btn_selectall").click(function() {
-    const text = $(this).prop("value");
-    let selectall = true;
-
-    if (text === "Select all") {
-        $(this).prop("value", "Deselect all");
-    }
-    else {
-        $(this).prop("value", "Select all");
-        selectall = false;
-    }
-
-    reset(selectall, false);
+    selectAll(this);
 });
 
 $("#btn_selectall_source1").click(function() {
-    const text = $(this).prop("value");
-    let selectall = true;
-
-    if (text === "Select all") {
-        $(this).prop("value", "Deselect all");
-    }
-    else {
-        $(this).prop("value", "Select all");
-        selectall = false;
-    }
-
-    reset(selectall, false);
+    selectAll(this);
 });
 
 $("#btn_selectall_source2").click(function() {
-    const text = $(this).prop("value");
-    let selectall = true;
-
-    if (text === "Select all") {
-        $(this).prop("value", "Deselect all");
-    }
-    else {
-        $(this).prop("value", "Select all");
-        selectall = false;
-    }
-
-    reset(selectall, false);
+    selectAll(this);
 });
 
 $(".field-btn").change(function() {
@@ -144,4 +111,19 @@ function submitForms() {
     document.getElementById("source1_form").submit();
     document.getElementById("source2_form").submit();
     document.getElementById("sliders_form").submit();
+}
+
+function selectAll(id) {
+    const text = $(id).prop("value");
+    let selectall = true;
+
+    if (text === "Select all") {
+        $(id).prop("value", "Deselect all");
+    }
+    else {
+        $(id).prop("value", "Select all");
+        selectall = false;
+    }
+
+    reset(selectall, false);
 }

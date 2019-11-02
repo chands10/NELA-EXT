@@ -82,31 +82,36 @@
 </div>
 
 <input type="button" class="btn btn-info" value="Features" id="fieldsBtn">
-
-<div class="card" style="width: 25rem;">
-    <div class="card-body">
-        <h5 class="card-title" align="center">Specify Ranges</h5>
-        <form method="POST" action="{{ url_for('data') }}" id="sliders_form">
-            {{ form2.csrf_token }}
-            <div id="sliders_row" class="pt-2" align="center">
-                {{ form2.Sliders }}
+<br>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card" style="width: 20rem;">
+            <div class="card-body" style="padding-left: 0; padding-right: 0;">
+                <h5 class="card-title" align="center">Specify Feature Ranges</h5>
+                <form method="POST" action="{{ url_for('data') }}" id="sliders_form">
+                    {{ form2.csrf_token }}
+                    <div id="sliders_row" class="pt-2" align="center">
+                        {{ form2.Sliders }}
+                    </div>
+                </form>
+                <div class="card-footer text-center">
+                    <input type="text" id="daterange" name="daterange" form="sliders_form" style="text-align: center;" 
+                        value="{{ daterange }}" align="center">
+                    <input type="button" class="btn btn-info" value="Primary Sources" id="source1Btn">
+                    <input type="button" class="btn btn-info" value="Secondary Sources" id="source2Btn">
+                    <!-- <input type="submit" class="btn btn-primary" value="Filter" form="sliders_form" id="btn_submit2"> -->
+                    <input type="submit" class="btn btn-primary" value="Filter" onclick="submitForms()">
+                    <!-- <input type="button" class="btn btn-warning" value="Reset" id="btn_reset_fields"> -->
+                    <input type="button" class="btn btn-warning" value="Reset" onclick="window.location.href = '{{ url_for('index') }}'">
+                </div>
             </div>
-        </form>
-        <div class="card-footer text-center">
-            <input type="text" id="daterange" name="daterange" form="sliders_form" style="text-align: center;" 
-                value="{{ daterange }}" align="center">
-            <input type="button" class="btn btn-info" value="Primary Sources" id="source1Btn">
-            <input type="button" class="btn btn-info" value="Secondary Sources" id="source2Btn">
-            <!-- <input type="submit" class="btn btn-primary" value="Filter" form="sliders_form" id="btn_submit2"> -->
-            <input type="submit" class="btn btn-primary" value="Filter" onclick="submitForms()">
-            <!-- <input type="button" class="btn btn-warning" value="Reset" id="btn_reset_fields"> -->
-            <input type="button" class="btn btn-warning" value="Reset" onclick="window.location.href = '{{ url_for('index') }}'">
         </div>
     </div>
-</div>
-
-<div class="container rounded pt-2" style="background-color:white; position:absolute; right:-30px; top:184px;">
-    {{ table }}
+    <div class="col-md-9">
+        <div class="container rounded pt-2" style="background-color:white;">
+            {{ table }}
+        </div>
+    </div>
 </div>
 
 {% endblock %}

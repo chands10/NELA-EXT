@@ -1,13 +1,20 @@
 # TODO
-* Fix cross-browser issue (specifically chrome), where the daterange is on the same row as the button
 * Fix loading in glitch where the container visibly resizes itself
 * Consolidate js init files to a single file
 * Use unminified files for dev and then minify for production
 
-* Fix CSS for table
-* Fix no fields displayed not blocking submit button?
+* Get rid of lower display?
 
 # DONE
+* Fix CSS for table
+* Minimize white space
+* Clean up code
+* Add Titles, Sources to dict
+* Get rid of (Title) for each field
+* Rename ranges
+* Get rid of id
+* Switch differences
+
 * Make space smaller under and to side of ranges
 * Master reset/filter button (Use sessions to have one master filter button)
 * Change match_display to normal_display, lower_display, sources_display, Title1, Title2, Source1, Source2, title1_date, title2_date
